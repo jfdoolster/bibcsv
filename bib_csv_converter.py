@@ -5,8 +5,11 @@ import json
 
 class ConvertBib2Csv:
     def __init__(self, bib_path: str, csv_path='refs.csv', custom_keys=True, display_keywords=False):
+        # https://tex.stackexchange.com/questions/334465/bibtex-citation-author-a-named-group-beginning-with-the-reduces-to-t
+        self.bib_data = pybtex.database.parse_string(r"""@PREAMBLE{"\newcommand{\sortas}[1]{}"}""", 'bibtex')
         print(f"\nParsing bibtex file '{bib_path}' ...",)
-        self.bib_data = pybtex.database.parse_file(bib_path)
+        entries = pybtex.database.parse_file(bib_path).entries
+        self.bib_data.entries = entries
         print(f"File parsed! Found {self.number_of_entries()} reference(s)")
 
         print("Converting .bib to .csv ...")
@@ -18,6 +21,7 @@ class ConvertBib2Csv:
 
         if display_keywords:
             self.check_keywords()
+
 
         self.dfout.to_csv(csv_path, index=False, quotechar='"', sep='\t')
         print(f"Output csv file '{csv_path}'", end="\n\n")
