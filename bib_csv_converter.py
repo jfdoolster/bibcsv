@@ -37,6 +37,7 @@ class ConvertBib2Csv:
             'biburl',
             'isbn',
             'abstract']]
+        self.dfout = self.dfout.sort_values(by=['entry_key'])
 
     def validate_df(self) -> None:
         for _, row in self.dfout.iterrows():
@@ -60,12 +61,12 @@ class ConvertBib2Csv:
 
                 "address": self.get_field(e, 'address'),
                 "annote": self.get_field(e, 'annote'),
-                "author": self.create_author_str(e),
+                "author": self.create_person_str(e, ptype='author'),
                 "booktitle": self.get_field(e, 'booktitle'),
                 "chapter": self.get_field(e, 'chapter'),
                 "crossref": self.get_field(e, 'crossref'),
                 "edition": self.get_field(e, 'edition'),
-                "editor": self.get_field(e, 'editor'),
+                "editor": self.create_person_str(e, ptype='editor'),
                 "howpublished": self.get_field(e, 'howpublished'),
                 "institution": self.get_field(e, 'institution'),
                 "journal": self.get_field(e, 'journal'),
@@ -111,9 +112,9 @@ class ConvertBib2Csv:
         keywords = ""
         kw_str = self.get_field(entry_key, 'keywords')
         kw_list = [x.strip() for x in kw_str.split(',')]
-        kw_list.sort()
+        sorted(kw_list, key=lambda v: v.upper())
         if len(kw_list) > 0:
-            keywords = ','.join(kw_list)
+            keywords = ', '.join(kw_list)
         return keywords
 
 
@@ -135,34 +136,56 @@ class ConvertBib2Csv:
         #    print(f"WARN: comma (',') found in '{field_name}' ({entry_key})")
         return value
 
-    def get_first_author(self, entry_key: str) -> pybtex.database.Person:
-        return self.bib_data.entries[entry_key].persons['author'][0]
+    def get_main_name(self, entry_key: str) -> str: #pybtex.database.Person:
+        main_name = "Misc"
+        persons = self.bib_data.entries[entry_key].persons
+        for ptype in ['author', 'editor']:
+            if ptype in persons.keys():
+                tmp = (persons[ptype])[0]
+                main_name = ''.join(tmp.last_names)
+                for rep in ['.', ',', '-', r'\`', r'\~']:
+                    main_name = main_name.replace(rep, "")
+                return main_name
+
+        for field in ['orgainization','institution']:
+            tmp_str = self.get_field(entry_key, field)
+            if tmp_str != "":
+                main_name = "".join(tmp_str.split())
+                for rep in ['.', ',', '-', r'\`', r'\~']:
+                    main_name = main_name.replace(rep, "")
+                return main_name
+
+        return main_name
+
+
 
     def custom_entry_key(self, entry_key, display=False) -> str:
-        lastname = ''.join(self.get_first_author(entry_key).last_names)
+        main_name = self.get_main_name(entry_key)
         year = self.get_field(entry_key, 'year')
 
         custom_key = entry_key
-        if len(year) != 0:
-            custom_key = f"{lastname}{year}"
+        if len(year) != 0 and main_name != 'Misc':
+            custom_key = f"{main_name}{year}"
             if display:
                 print(f"Re-Keying '{entry_key}' -> '{custom_key}'")
 
         return custom_key
 
-
-    def create_author_str(self, entry_key: str) -> str:
-        author_list = self.bib_data.entries[entry_key].persons['author']
-        author_str = ""
-        for i,p in enumerate(author_list):
+    def create_person_str(self, entry_key: str, ptype: 'author') -> str:
+        person_str = ""
+        persons = self.bib_data.entries[entry_key].persons
+        if ptype not in persons.keys():
+            return ""
+        person_list = persons[ptype]
+        for i,p in enumerate(person_list):
             first_name = ''.join(p.first_names)
             middle_name = ''.join(p.middle_names)
             last_name = ''.join(p.last_names)
             #print(type(first_name), type(middle_name), type(last_name))
-            author_str += f"{first_name:s} {middle_name:s} {last_name:s}"
-            if i != (len(author_list) - 1):
-                author_str += "  and  "
-        return author_str
+            person_str += f"{first_name:s} {middle_name:s} {last_name:s}"
+            if i != (len(person_list) - 1):
+                person_str += "  and  "
+        return person_str
 
 class ConvertCsv2Bib:
     def __init__(self, csv_path: str, bib_path = 'refs.bib'):
