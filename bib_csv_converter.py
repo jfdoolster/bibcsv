@@ -4,7 +4,7 @@ import pandas as pd
 import json
 
 class ConvertBib2Csv:
-    def __init__(self, bib_path: str, csv_path='refs.csv', custom_keys=True):
+    def __init__(self, bib_path: str, csv_path='refs.csv', custom_keys=True, display_keywords=False):
         print(f"\nParsing bibtex file '{bib_path}' ...",)
         self.bib_data = pybtex.database.parse_file(bib_path)
         print(f"File parsed! Found {self.number_of_entries()} reference(s)")
@@ -16,7 +16,8 @@ class ConvertBib2Csv:
         self.reorder_df()
         print("Conversion completed!")
 
-        self.check_keywords()
+        if display_keywords:
+            self.check_keywords()
 
         self.dfout.to_csv(csv_path, index=False, quotechar="'", sep='\t')
         print(f"Output csv file '{csv_path}'", end="\n\n")
@@ -212,7 +213,7 @@ class ConvertBib2Csv:
         return person_str
 
 class ConvertCsv2Bib:
-    def __init__(self, csv_path: str, bib_path = 'refs.bib'):
+    def __init__(self, csv_path: str, bib_path = 'refs.bib', display_citations=False):
         print(f"\nReading csv file '{csv_path}' ...")
         self.dfin = pd.read_csv(csv_path, quotechar="'", sep='\t', dtype=str)
         self.dfin = self.dfin.fillna('')
@@ -222,6 +223,9 @@ class ConvertCsv2Bib:
         self.bib_data = self.initialize_entries()
         self.populate_entries()
         print("Conversion completed!")
+
+        if display_citations:
+            self.create_cite_list()
 
         self.bib_data.to_file(bib_path, 'bibtex')
         print(f"Output bib file '{bib_path}'", end="\n\n")
@@ -263,6 +267,15 @@ class ConvertCsv2Bib:
             for remaining_field in self.dfin.columns:
                 if (remaining_field not in entry_specific_fields) and (row[remaining_field] != ""):
                     self.bib_data.entries[entry_key].fields[remaining_field] = row[remaining_field]
+
+    def create_cite_list(self):
+        print("\n\\cite{", end="")
+        entry_list = list(self.bib_data.entries)
+        for i,e in enumerate(entry_list):
+            if i == (len(entry_list)-1):
+                print(e, end="}\n\n")
+                continue
+            print(e, end=", ")
 
 # https://www.openoffice.org/bibliographic/bibtex-defs.html
 bib_entry_types = {

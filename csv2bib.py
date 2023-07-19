@@ -20,4 +20,4 @@ if __name__ =="__main__":
         print(f"ERROR: file '{csv_path}' does not exist")
         sys.exit()
 
-    ConvertCsv2Bib(csv_path, bib_path)
+    ConvertCsv2Bib(csv_path, bib_path, display_citations=True)
