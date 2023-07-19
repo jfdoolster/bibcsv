@@ -34,3 +34,11 @@ conda install -c conda-forge argparse
 
 - https://docs.pybtex.org/api/index.html
 - http://www.paolomonella.it/pybtex/index.html
+
+
+windows
+```
+python bib2csv.py -b ./examples/web_refs.bib -c C:/Users/jdooley/Documents/GitHub/nmt_thesis/bib/refs.csv
+
+python csv2bib.py -c C:/Users/jdooley/Documents/GitHub/nmt_thesis/bib/refs.csv -b C:/Users/jdooley/Documents/GitHub/nmt_thesis/bib/refs.bib
+```

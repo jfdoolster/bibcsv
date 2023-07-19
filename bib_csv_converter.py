@@ -19,7 +19,7 @@ class ConvertBib2Csv:
         if display_keywords:
             self.check_keywords()
 
-        self.dfout.to_csv(csv_path, index=False, quotechar="'", sep='\t')
+        self.dfout.to_csv(csv_path, index=False, quotechar='"', sep='\t')
         print(f"Output csv file '{csv_path}'", end="\n\n")
 
     def check_keywords(self):
@@ -190,9 +190,11 @@ class ConvertBib2Csv:
 
         custom_key = entry_key
         if len(year) != 0 and main_name != 'Misc':
-            custom_key = f"{main_name}{year}"
-            if display:
-                print(f"Re-Keying '{entry_key}' -> '{custom_key}'")
+            new_key = f"{main_name}{year}"
+            if new_key != custom_key:
+                custom_key = new_key
+                if display:
+                    print(f"Re-Keying '{entry_key}' -> '{custom_key}'")
 
         return custom_key
 
@@ -215,7 +217,7 @@ class ConvertBib2Csv:
 class ConvertCsv2Bib:
     def __init__(self, csv_path: str, bib_path = 'refs.bib', display_citations=False):
         print(f"\nReading csv file '{csv_path}' ...")
-        self.dfin = pd.read_csv(csv_path, quotechar="'", sep='\t', dtype=str)
+        self.dfin = pd.read_csv(csv_path, quotechar='"', sep='\t', dtype=str)
         self.dfin = self.dfin.fillna('')
         print(f"File Read! Found {self.number_of_entries()} reference(s)")
 
