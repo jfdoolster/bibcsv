@@ -1,6 +1,7 @@
 import pybtex.database
 import pybtex.utils
 import pandas as pd
+import json
 
 class ConvertBib2Csv:
     def __init__(self, bib_path: str, csv_path='refs.csv', custom_keys=True):
@@ -15,15 +16,37 @@ class ConvertBib2Csv:
         self.reorder_df()
         print("Conversion completed!")
 
+        self.check_keywords()
+
         self.dfout.to_csv(csv_path, index=False, quotechar="'", sep='\t')
         print(f"Output csv file '{csv_path}'", end="\n\n")
+
+    def check_keywords(self):
+        keywords = self.dfout['keywords']
+        keywords_all = []
+        for kw in keywords:
+            kw_list = [x.strip() for x in kw.split(',')]
+            for k in kw_list:
+                keywords_all.append(k)
+        keywords_all = [i for i in keywords_all if i != ""]
+
+        kw_dict = {}
+        keywords_del = keywords_all
+        for kw in keywords_all:
+            if kw in keywords_del:
+                kw_dict[kw] = keywords_all.count(kw)
+                keywords_del = [i for i in keywords_del if i != kw]
+
+        print(json.dumps(kw_dict, sort_keys=True, indent=4))
+        print(keywords_del)
+
 
     def reorder_df(self):
         self.dfout = self.dfout[[
             'entry_key', 'keywords',
             'howpublished','journal','publisher',
             'title','booktitle',
-            'url','doi','entry_type',
+            'link','url','doi','entry_type',
             'author','editor',
             'organization','school','institution',
             'year','month',
@@ -84,6 +107,7 @@ class ConvertBib2Csv:
                 "year": self.get_field(e, 'year'),
 
                 "keywords": self.get_keywords(e),
+                "link":  self.get_field(e, 'link'),
                 "url": self.get_field(e, 'url'),
                 "doi": self.get_field(e, 'doi'),
                 "eprint": self.get_field(e, 'eprint'),
@@ -111,8 +135,8 @@ class ConvertBib2Csv:
     def get_keywords(self, entry_key: str) -> str:
         keywords = ""
         kw_str = self.get_field(entry_key, 'keywords')
-        kw_list = [x.strip() for x in kw_str.split(',')]
-        sorted(kw_list, key=lambda v: v.upper())
+        kw_list = [x.strip().lower() for x in kw_str.split(',')]
+        kw_list.sort()
         if len(kw_list) > 0:
             keywords = ', '.join(kw_list)
         return keywords

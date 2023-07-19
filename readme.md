@@ -32,5 +32,5 @@ conda install -c conda-forge argparse
 
 ## links
 
-https://docs.pybtex.org/api/index.html
-http://www.paolomonella.it/pybtex/index.html
+- https://docs.pybtex.org/api/index.html
+- http://www.paolomonella.it/pybtex/index.html
