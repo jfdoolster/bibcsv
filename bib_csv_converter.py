@@ -20,17 +20,17 @@ class ConvertBib2Csv:
 
     def reorder_df(self):
         self.dfout = self.dfout[[
-            'entry_key', 'entry_type','keywords',
-            'title','author','journal','booktitle',
-            'url','doi',
+            'entry_key', 'keywords',
+            'howpublished','journal','publisher',
+            'title','booktitle',
+            'url','doi','entry_type',
+            'author','editor',
+            'organization','school','institution',
             'year','month',
-            'publisher','organization','school','institution',
             'volume','number','pages','chapter','edition','series',
-            'editor',
             'address',
             'annote',
             'crossref',
-            'howpublished',
             'key',
             'note',
             'eprint',
@@ -82,7 +82,7 @@ class ConvertBib2Csv:
                 "volume": self.get_field(e, 'volume'),
                 "year": self.get_field(e, 'year'),
 
-                "keywords": self.get_field(e, 'keywords'),
+                "keywords": self.get_keywords(e),
                 "url": self.get_field(e, 'url'),
                 "doi": self.get_field(e, 'doi'),
                 "eprint": self.get_field(e, 'eprint'),
@@ -106,6 +106,16 @@ class ConvertBib2Csv:
 
     def list_fields(self, entry_key: str) -> pybtex.utils.OrderedCaseInsensitiveDict:
         return self.bib_data.entries[entry_key].fields
+
+    def get_keywords(self, entry_key: str) -> str:
+        keywords = ""
+        kw_str = self.get_field(entry_key, 'keywords')
+        kw_list = [x.strip() for x in kw_str.split(',')]
+        kw_list.sort()
+        if len(kw_list) > 0:
+            keywords = ','.join(kw_list)
+        return keywords
+
 
     def get_abstract(self, entry_key: str) -> str:
         abstract = ""
@@ -172,7 +182,7 @@ class ConvertCsv2Bib:
     def number_of_entries(self) -> int:
         return len(self.dfin)
 
-    def initialize_entries(self):
+    def initialize_entries(self) -> pybtex.database.BibliographyData:
         tmp_dict = {}
         for _, row in self.dfin.iterrows():
             entry_key = row['entry_key']
@@ -196,8 +206,7 @@ class ConvertCsv2Bib:
                 self.bib_data.entries[entry_key].fields[required_field] = row[required_field]
 
             for optional_field in bib_entry_types[entry_type]['optional']:
-                if row[optional_field] != "":
-                    self.bib_data.entries[entry_key].fields[optional_field] = row[optional_field]
+                self.bib_data.entries[entry_key].fields[optional_field] = row[optional_field]
 
             entry_specific_fields = bib_entry_types[entry_type]['required'] + \
                                     bib_entry_types[entry_type]['optional'] + \
