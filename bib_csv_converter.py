@@ -229,7 +229,8 @@ class ConvertCsv2Bib:
                 self.bib_data.entries[entry_key].fields[required_field] = row[required_field]
 
             for optional_field in bib_entry_types[entry_type]['optional']:
-                self.bib_data.entries[entry_key].fields[optional_field] = row[optional_field]
+                if optional_field in self.dfin.columns:
+                    self.bib_data.entries[entry_key].fields[optional_field] = row[optional_field]
 
             entry_specific_fields = bib_entry_types[entry_type]['required'] + \
                                     bib_entry_types[entry_type]['optional'] + \
