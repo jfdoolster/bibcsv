@@ -1,5 +1,6 @@
 *.tsv
 *.csv
 *.bib
+*.tex
 !examples/*.bib
 __pycache__

@@ -1,7 +1,7 @@
+import json
+import pandas as pd
 import pybtex.database
 import pybtex.utils
-import pandas as pd
-import json
 
 class ConvertBib2Csv:
     def __init__(self, bib_path: str, csv_path='refs.csv', custom_keys=True, display_keywords=False):
@@ -219,7 +219,7 @@ class ConvertBib2Csv:
         return person_str
 
 class ConvertCsv2Bib:
-    def __init__(self, csv_path: str, bib_path = 'refs.bib', display_citations=False):
+    def __init__(self, csv_path: str, bib_path = 'refs.bib', tex_path='refs.tex', display_citations=False):
         print(f"\nReading csv file '{csv_path}' ...")
         self.dfin = pd.read_csv(csv_path, quotechar='"', sep='\t', dtype=str)
         self.dfin = self.dfin.fillna('')
@@ -230,8 +230,12 @@ class ConvertCsv2Bib:
         self.populate_entries()
         print("Conversion completed!")
 
+
+        self.cite_str = self.create_cite_list()
         if display_citations:
-            self.create_cite_list()
+            print(self.cite_str)
+
+        self.create_refs_tex(tex_path)
 
         self.bib_data.to_file(bib_path, 'bibtex')
         print(f"Output bib file '{bib_path}'", end="\n\n")
@@ -274,14 +278,27 @@ class ConvertCsv2Bib:
                 if (remaining_field not in entry_specific_fields) and (row[remaining_field] != ""):
                     self.bib_data.entries[entry_key].fields[remaining_field] = row[remaining_field]
 
-    def create_cite_list(self):
-        print("\n\\cite{", end="")
+    def create_cite_list(self) -> str:
         entry_list = list(self.bib_data.entries)
+        cites=""
         for i,e in enumerate(entry_list):
             if i == (len(entry_list)-1):
-                print(e, end="}\n\n")
+                cites += e+""
                 continue
-            print(e, end=", ")
+            cites += e+","
+        cite_str=r"\cite{"+cites+r"}%"
+        return cite_str
+
+    def create_refs_tex(self, tex_path: str):
+        with open(tex_path, "w", encoding="utf_8") as tex_file:
+            tex_file.writelines([r"\documentclass[12pt]{article}", "\n",
+                r"\usepackage[top =1in, left = 1in, bottom=1in, right=1in]{geometry}"
+                r"\usepackage[sort&compress]{natbib}", "\n",
+                r"\begin{document}", "\n",
+                self.cite_str, "\n",
+                r"\bibliographystyle{unsrt}", "\n",
+                r"\bibliography{bib/refs}", "\n",
+                r"\end{document}"])
 
 # https://www.openoffice.org/bibliographic/bibtex-defs.html
 bib_entry_types = {
