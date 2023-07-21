@@ -14,7 +14,7 @@ python csv2bib.py -c refs.csv -b refs.bib
 ```
 
 ```bash
-python bib2csv.py -b ./examples/web_refs.bib -c refs.csv && python csv2bib.py -c refs.csv -b refs.bib
+python bib2csv.py -b ./examples/web_refs.bib -c refs.csv && python csv2bib.py -c refs.csv
 ```
 
 
