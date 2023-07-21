@@ -292,7 +292,7 @@ class ConvertCsv2Bib:
     def create_refs_tex(self, tex_path: str):
         with open(tex_path, "w", encoding="utf_8") as tex_file:
             tex_file.writelines([r"\documentclass[12pt]{article}", "\n",
-                r"\usepackage[top =1in, left = 1in, bottom=1in, right=1in]{geometry}"
+                r"\usepackage[top=1in, left=1in, bottom=1in, right=1in]{geometry}", "\n",
                 r"\usepackage[sort&compress]{natbib}", "\n",
                 r"\begin{document}", "\n",
                 self.cite_str, "\n",
