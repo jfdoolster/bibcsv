@@ -202,7 +202,7 @@ class ConvertBib2Csv:
 
         return custom_key
 
-    def create_person_str(self, entry_key: str, ptype: 'author') -> str:
+    def create_person_str(self, entry_key: str, ptype = 'author') -> str:
         person_str = ""
         persons = self.bib_data.entries[entry_key].persons
         if ptype not in persons.keys():
@@ -286,7 +286,7 @@ class ConvertCsv2Bib:
                 cites += e+""
                 continue
             cites += e+","
-        cite_str=r"\cite{"+cites+r"}%"
+        cite_str=r"~\cite{"+cites+r"}%"
         return cite_str
 
     def create_refs_tex(self, tex_path: str):
