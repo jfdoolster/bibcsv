@@ -40,7 +40,7 @@ windows
 ```
 python bib2csv.py -b ./examples/web_refs.bib -c C:/Users/jdooley/Documents/GitHub/nmt_thesis/bib/refs.csv
 
-python csv2bib.py -c C:/Users/jdooley/Documents/GitHub/nmt_thesis/bib/refs.csv -b C:/Users/jdooley/Documents/GitHub/nmt_thesis/bib/refs.bib
+python csv2bib.py -c C:/Users/jdooley/Documents/GitHub/nmt_thesis/bib/refs.csv -b C:/Users/jdooley/Documents/GitHub/nmt_thesis/bib/refs.bib -t C:/Users/jdooley/Documents/GitHub/nmt_thesis/bib/refs.tex
 ```
 
 linux
