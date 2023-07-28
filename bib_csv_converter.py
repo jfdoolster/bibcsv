@@ -171,18 +171,20 @@ class ConvertBib2Csv:
         for ptype in ['author', 'editor']:
             if ptype in persons.keys():
                 tmp = (persons[ptype])[0]
-                main_name = ''.join(tmp.last_names)
-                for rep in ['.', ',', '-', r'\`', r'\~']:
+                main_name = ' '.join(tmp.last_names)
+                for rep in ['{','}','.', ',', '-', r'\`', r'\~']:
                     main_name = main_name.replace(rep, "")
-                return main_name
+                main_name = main_name+" "
+                return main_name.split(" ", maxsplit=1)[0]
 
-        for field in ['orgainization','institution']:
-            tmp_str = self.get_field(entry_key, field)
-            if tmp_str != "":
-                main_name = "".join(tmp_str.split())
-                for rep in ['.', ',', '-', r'\`', r'\~']:
-                    main_name = main_name.replace(rep, "")
-                return main_name
+        #for field in ['orgainization','institution']:
+        #    tmp_str = self.get_field(entry_key, field)
+        #    if tmp_str != "":
+        #        main_name = " ".join(tmp_str.split())
+        #        for rep in ['.', ',', '-', r'\`', r'\~']:
+        #            main_name = main_name.replace(rep, "")
+        #        main_name = main_name+" "
+        #        return main_name.split(" ", maxsplit=1)[0]
 
         return main_name
 
@@ -193,7 +195,7 @@ class ConvertBib2Csv:
         year = self.get_field(entry_key, 'year')
 
         custom_key = entry_key
-        if len(year) != 0 and main_name != 'Misc':
+        if (len(year) != 0 and main_name != 'Misc'):
             new_key = f"{main_name}{year}"
             if new_key != custom_key:
                 custom_key = new_key
