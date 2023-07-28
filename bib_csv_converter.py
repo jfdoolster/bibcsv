@@ -168,26 +168,15 @@ class ConvertBib2Csv:
     def get_main_name(self, entry_key: str) -> str: #pybtex.database.Person:
         main_name = "Misc"
         persons = self.bib_data.entries[entry_key].persons
-        for ptype in ['author', 'editor']:
+        for ptype in ['author','editor']:
             if ptype in persons.keys():
                 tmp = (persons[ptype])[0]
-                main_name = ' '.join(tmp.last_names)
+                main_name = ''.join(tmp.last_names)
                 for rep in ['{','}','.', ',', '-', r'\`', r'\~']:
                     main_name = main_name.replace(rep, "")
-                main_name = main_name+" "
-                return main_name.split(" ", maxsplit=1)[0]
-
-        #for field in ['orgainization','institution']:
-        #    tmp_str = self.get_field(entry_key, field)
-        #    if tmp_str != "":
-        #        main_name = " ".join(tmp_str.split())
-        #        for rep in ['.', ',', '-', r'\`', r'\~']:
-        #            main_name = main_name.replace(rep, "")
-        #        main_name = main_name+" "
-        #        return main_name.split(" ", maxsplit=1)[0]
+                break
 
         return main_name
-
 
 
     def custom_entry_key(self, entry_key, display=False) -> str:
@@ -211,9 +200,9 @@ class ConvertBib2Csv:
             return ""
         person_list = persons[ptype]
         for i,p in enumerate(person_list):
-            first_name = ''.join(p.first_names)
-            middle_name = ''.join(p.middle_names)
-            last_name = ''.join(p.last_names)
+            first_name = ' '.join(p.first_names)
+            middle_name = ' '.join(p.middle_names)
+            last_name = ' '.join(p.last_names)
             #print(type(first_name), type(middle_name), type(last_name))
             person_str += f"{first_name:s} {middle_name:s} {last_name:s}"
             if i != (len(person_list) - 1):
