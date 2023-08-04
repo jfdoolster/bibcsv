@@ -45,5 +45,6 @@ python csv2bib.py -c C:/Users/jdooley/Documents/GitHub/nmt_thesis/bib/refs.csv -
 
 linux
 ```
-python bib2csv.py -b ./examples/web_refs.bib -c refs.csv && python csv2bib.py -c ~/Documents/nmt_thesis/bib/refs.csv -b ~/Documents/nmt_thesis/bib/refs.bib -t ~/Documents/nmt_thesis/refs.tex
+python bib2csv.py -b ./examples/web_refs.bib -c refs.csv && python csv2bib.py -c  refs.csv -b refs.bib -t refs.tex
+cp ./refs.bib/acs_paper
 ```
