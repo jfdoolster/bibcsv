@@ -277,18 +277,17 @@ class ConvertCsv2Bib:
                 cites += e+""
                 continue
             cites += e+","
-        cite_str=r"~\cite{"+cites+r"}%"
+        cite_str=r"All Citations~\cite{"+cites+r"}%"
         return cite_str
 
     def create_refs_tex(self, tex_path: str):
         with open(tex_path, "w", encoding="utf_8") as tex_file:
-            tex_file.writelines([r"\documentclass[12pt]{article}", "\n",
-                r"\usepackage[top=1in, left=1in, bottom=1in, right=1in]{geometry}", "\n",
-                r"\usepackage[sort&compress]{natbib}", "\n",
+            tex_file.writelines([
+                r"\documentclass[email=false]{achemso}", "\n",
+                r"\title{Full List of References}", "\n",
                 r"\begin{document}", "\n",
                 self.cite_str, "\n",
-                r"\bibliographystyle{unsrt}", "\n",
-                r"\bibliography{bib/refs}", "\n",
+                r"\bibliography{refs}", "\n",
                 r"\end{document}"])
 
 # https://www.openoffice.org/bibliographic/bibtex-defs.html

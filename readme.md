@@ -38,9 +38,9 @@ conda install -c conda-forge argparse
 
 windows
 ```
-python bib2csv.py -b ./examples/web_refs.bib -c C:/Users/jdooley/Documents/GitHub/nmt_thesis/bib/refs.csv
+python bib2csv.py -b ./examples/web_refs.bib -c C:/Users/jdooley/Documents/GitHub/acs_paper/refs.csv
 
-python csv2bib.py -c C:/Users/jdooley/Documents/GitHub/nmt_thesis/bib/refs.csv -b C:/Users/jdooley/Documents/GitHub/nmt_thesis/bib/refs.bib -t C:/Users/jdooley/Documents/GitHub/nmt_thesis/bib/refs.tex
+python csv2bib.py -c C:/Users/jdooley/Documents/GitHub/acs_paper/refs.csv -b C:/Users/jdooley/Documents/GitHub/acs_paper/refs.bib -t C:/Users/jdooley/Documents/GitHub/acs_paper/refs.tex
 ```
 
 linux
