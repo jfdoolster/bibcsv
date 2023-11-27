@@ -2,5 +2,7 @@
 *.csv
 *.bib
 *.tex
-!examples/*.bib
+!examples/refs.csv
+!examples/web_refs.bib
 __pycache__
+.pylintrc
