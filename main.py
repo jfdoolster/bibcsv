@@ -1,4 +1,5 @@
 import os
+import sys
 from bib2csv import ConvertBib2Csv
 from csv2bib import ConvertCsv2Bib
 
