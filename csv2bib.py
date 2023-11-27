@@ -1,9 +1,10 @@
-import json
 import pandas as pd
 import pybtex.database
 import pybtex.utils
 
 from bibtypes import bib_entry_types
+
+# pylint: disable=redefined-outer-name
 
 class ConvertCsv2Bib:
     def __init__(self, csv_path: str, bib_path = 'refs.bib', tex_path='refs.tex', display_citations=False):

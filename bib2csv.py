@@ -5,6 +5,8 @@ import pybtex.utils
 
 from bibtypes import bib_entry_types
 
+# pylint: disable=redefined-outer-name
+
 class ConvertBib2Csv:
     def __init__(self, bib_path: str, csv_path='refs.csv', custom_keys=True, display_keywords=False):
         # https://tex.stackexchange.com/questions/334465/bibtex-citation-author-a-named-group-beginning-with-the-reduces-to-t
@@ -227,11 +229,11 @@ if __name__ =="__main__":
     args = parser.parse_args()
     argdict = vars(args)
 
-    bibtex_path=os.path.abspath(argdict['bib_path'])
-    csvfile_path=os.path.abspath(argdict['csv_path'])
-    if not os.path.isfile(bibtex_path):
-        print(f"ERROR: file '{bibtex_path}' does not exist")
+    bib_path=os.path.abspath(argdict['bib_path'])
+    csv_path=os.path.abspath(argdict['csv_path'])
+    if not os.path.isfile(bib_path):
+        print(f"ERROR: file '{bib_path}' does not exist")
         sys.exit()
 
-    ConvertBib2Csv(bibtex_path, csvfile_path, custom_keys=argdict['rename_keys'])
+    ConvertBib2Csv(bib_path, csv_path, custom_keys=argdict['rename_keys'])
 
