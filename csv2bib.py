@@ -3,7 +3,7 @@ import pandas as pd
 import pybtex.database
 import pybtex.utils
 
-from .bibtypes import bib_entry_types
+from bibtypes import bib_entry_types
 
 class ConvertCsv2Bib:
     def __init__(self, csv_path: str, bib_path = 'refs.bib', tex_path='refs.tex', display_citations=False):
