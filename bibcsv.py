@@ -241,7 +241,7 @@ if __name__ =="__main__":
 # pylint: disable=redefined-outer-name
 
 class ConvertCsv2Bib:
-    def __init__(self, csv_path: str, bib_path = 'refs.bib', tex_path='refs.tex', display_citations=False):
+    def __init__(self, csv_path: str, bib_path = 'refs.bib', display_citations=False):
         print(f"\nReading csv file '{csv_path}' ...")
         self.dfin = pd.read_csv(csv_path, quotechar='"', sep='\t', dtype=str)
         self.dfin = self.dfin.fillna('')
@@ -257,10 +257,11 @@ class ConvertCsv2Bib:
         if display_citations:
             print(self.cite_str)
 
-        self.create_refs_tex(tex_path,bib_path)
+        #self.create_refs_tex(tex_path,bib_path)
 
-        self.bib_data.to_file(bib_path, 'bibtex')
-        print(f"Output bib file '{bib_path}'", end="\n\n")
+        if (bib_path is not None):
+            self.bib_data.to_file(bib_path, 'bibtex')
+            print(f"Output bib file '{bib_path}'", end="\n\n")
 
     def number_of_entries(self) -> int:
         return len(self.dfin)
