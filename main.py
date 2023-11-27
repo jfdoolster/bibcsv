@@ -1,7 +1,5 @@
 import os
-import sys
-from bib2csv import ConvertBib2Csv
-from csv2bib import ConvertCsv2Bib
+from bibcsv import ConvertCsv2Bib, ConvertBib2Csv
 
 if __name__ == "__main__":
 
