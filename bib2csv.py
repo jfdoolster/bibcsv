@@ -1,4 +1,3 @@
-
 from bibcsv import ConvertBib2Csv
 
 if __name__ =="__main__":

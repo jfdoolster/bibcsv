@@ -19,10 +19,10 @@ python csv2bib.py -h
 
 ```bash
 # read initial bib (collected from web) to csv
-python bib2csv.py -b ./examples/nuas_refs.bib -c refs.csv
+python bib2csv.py -b ./examples/web_refs.bib -c ./refs.csv
 
 # create refs.bib bibtex file from previously-generated csv
-python csv2bib.py -c refs.csv -b refs.bib -t refs.tex
+python csv2bib.py -c ./refs.csv -b ./refs.bib -t ./refs.tex
 ```
 
 ```bash
