@@ -288,7 +288,7 @@ class ConvertCsv2Bib:
         refs = bib[:bib.index('.bib')]
         with open(tex_path, "w", encoding="utf_8") as tex_file:
             tex_file.writelines([
-                r"\documentclass[email=false]{achemso}", "\n",
+                r"\documentclass[journal=esthag,manuscript=article,email=false]{achemso}", "\n",
                 r"\title{Full List of References}", "\n",
                 r"\begin{document}", "\n",
                 self.cite_str, "\n",
