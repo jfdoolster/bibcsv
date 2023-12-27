@@ -1,3 +1,4 @@
+import os
 import json
 import pandas as pd
 import pybtex.database
@@ -299,7 +300,7 @@ class ConvertCsv2Bib:
         return cite_str
 
     def create_refs_tex(self, tex_path: str, bib_path: str):
-        bib = bib_path.split('/')[-1]
+        bib = bib_path.split(os.sep)[-1]
         refs = bib[:bib.index('.bib')]
         with open(tex_path, "w", encoding="utf_8") as tex_file:
             tex_file.writelines([
