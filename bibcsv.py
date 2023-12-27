@@ -234,6 +234,21 @@ class ConvertCsv2Bib:
             self.bib_data.to_file(bib_path, 'bibtex')
             print(f"Output bib file '{bib_path}'", end="\n\n")
 
+    def replace_quotes(self, bib_path):
+        if (bib_path is not None):
+            fin = open(f"{bib_path}", 'rt')
+            data_in  = fin.readlines()
+            fin.close()
+            data_out = data_in
+            for i,din in enumerate(data_in):
+                dout = din.replace('"', '{', 1)
+                data_out[i] = dout.replace('"', '}', 1)
+            fin = open(f"{bib_path}", 'wt')
+            fin.write(data_out)
+            fin.close()
+
+
+
     def number_of_entries(self) -> int:
         return len(self.dfin)
 
