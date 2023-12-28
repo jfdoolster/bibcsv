@@ -25,7 +25,6 @@ class ConvertBib2Csv:
         if display_keywords:
             self.check_keywords()
 
-
         self.dfout.to_csv(csv_path, index=False, quotechar='"', sep='\t')
         print(f"Output csv file '{csv_path}'", end="\n\n")
 
