@@ -295,7 +295,7 @@ class ConvertCsv2Bib:
                 cites += e+""
                 continue
             cites += e+","
-        cite_str=r"All Citations~\cite{"+cites+r"}%"
+        cite_str=r"All Citations~\cite{"+cites+r"}"
         return cite_str
 
     def create_refs_tex(self, tex_path: str, bib_path: str):
@@ -303,12 +303,18 @@ class ConvertCsv2Bib:
         refs = bib[:bib.index('.bib')]
         with open(tex_path, "w", encoding="utf_8") as tex_file:
             tex_file.writelines([
-                r"\documentclass{achemso}", "\n",
-                r"\title{Full List of References}", "\n",
-                r"\begin{document}", "\n",
-                self.cite_str, "\n",
-                r"\bibliography{"+f"{refs:s}"+"}", "\n",
-                r"\end{document}"])
+                r"\documentclass[email=false]{achemso}", "%\n",
+                r"\title{Full List of References}", "%\n",
+                r"\author{Jonathan F. Dooley}","%\n"
+                r"\affiliation{\href{https://github.com/jfdoolster}{github.com/jfdoolster}}","%\n",
+                r"\usepackage[colorlinks=true,linkcolor=black,citecolor=black,urlcolor=black]{hyperref}","%\n",
+                r"\begin{document}", "%\n",
+                r"\noindent%", "%\n",
+                r"This document generated using \href{https://github.com/jfdoolster/bibcsv.git}{\tt{bibcsv}}. ", "%\n",
+                self.cite_str, ".%\n",
+                r"\bibliography{"+f"{refs:s}"+"}", "%\n",
+                r"\end{document}%"])
+
 
 # https://www.openoffice.org/bibliographic/bibtex-defs.html
 bib_entry_types = {
