@@ -185,9 +185,10 @@ class ConvertBib2Csv:
         main_name = self.get_main_name(entry_key)
         year = self.get_field(entry_key, 'year')
 
-        custom_key = entry_key
+        custom_key = entry_key.replace(' ', '')
         if (len(year) != 0 and main_name != 'Misc'):
             new_key = f"{main_name}{year}"
+            new_key=new_key.replace(' ', '')
             if new_key != custom_key:
                 custom_key = new_key
                 if display:
